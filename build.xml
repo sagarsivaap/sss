@@ -1,0 +1,44 @@
+<project name="example-java-ant" default="build">
+    <property file="build.properties"/>
+
+    <!-- paths used for compilation and run  -->
+    <path id="lib.path.id">
+        <fileset dir="${jars.dir}" />
+	</path>
+    <path id="run.path.id">
+        <path refid="lib.path.id" />
+        <path location="${build.dir}" />
+    </path>
+
+    <!-- =================================
+          target: build
+         ================================= -->
+    <target name="build" description="Compiles the project">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${jars.dir}" />
+        <copy todir="${jars.dir}">
+            <fileset dir="${lib.src.dir}"/>
+        </copy>
+        <javac srcdir="${src.dir}" destdir="${build.dir}" classpathref="lib.path.id" includeAntRuntime="false"/>
+    </target>
+
+    <!-- =================================
+          target: run
+         ================================= -->
+    <target name="run" depends="build" description="Runs the project">
+        <java classpathref="run.path.id" classname="com.srcclr.Main">
+        	<arg value="FirstAndOnlyArg"/>
+    	</java>
+    </target>
+
+    <!-- =================================
+          target: clean
+         ================================= -->
+    <target name="clean" description="Cleans the project">
+        <delete includeemptydirs="true">
+            <fileset dir="${build.dir}"></fileset>
+            <fileset dir="${jars.dir}"></fileset>
+    	</delete>
+    </target>
+
+</project>
